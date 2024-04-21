@@ -1,0 +1,7 @@
+/home/chen7323/Downloads/uhd/host/build/examples/txrx_loopback_to_file \
+--tx-args="type=x300,resource=RIO0" --tx-subdev="A:0" --tx-ant="TX/RX" --tx-rate=200000000 --tx-freq=2400000000 --tx-gain=20 \
+--rx-args="type=x300,resource=RIO0" --rx-subdev="A:0" --rx-ant="RX2" --rx-rate=200000000 --rx-freq=2400000000 --rx-gain=5 \
+--tx-settling=0.500000 --rx-settling=0.500000 \
+--tx-file="/home/chen7323/Downloads/mmw-tutorial/phy_samples/tx_data.dat" \
+--rx-file="/home/chen7323/Downloads/mmw-tutorial/phy_samples/usrp_samples.dat" \
+--nsamps=475880
