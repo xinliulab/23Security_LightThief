@@ -13,6 +13,7 @@ Here are the steps for setting up the mmWave experimental platform:
    d. check lock
  
 On the PC side:
+
 5. Open a terminal and cd ~/Downloads/mmw-tutorial/M-Cube-Hostcmds, and then control+shift+t to create two more tabs in the same directory
 6. [tab1] ssh root@192.168.137.1 (enter password 123456)
 7. [tab2] ssh root@192.168.137.2 (enter password 123456)
