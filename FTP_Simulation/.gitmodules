@@ -1,0 +1,9 @@
+[submodule "lib/legendflex-pkg"]
+	path = lib/legendflex-pkg
+	url = https://github.com/kakearney/legendflex-pkg.git
+[submodule "lib/matlab-hatchfill2"]
+	path = lib/matlab-hatchfill2
+	url = https://github.com/hokiedsp/matlab-hatchfill2.git
+[submodule "lib/CVX"]
+	path = lib/CVX
+	url = https://github.com/cvxr/CVX.git

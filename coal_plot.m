@@ -1,3 +1,7 @@
+close all;
+clear;
+clc;
+
 clear; close all;
 path(path, './lib');
 path(path, './mat_files');

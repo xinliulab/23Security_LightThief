@@ -1,4 +1,7 @@
-clear; close all;
+close all;
+clear;
+clc;
+
 path(path, './lib');
 path(path, './mat_files');
 path(path, './codebooks');
