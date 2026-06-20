@@ -8,7 +8,7 @@ End-to-end MATLAB simulations for **LightThief**, the system described in
 the USENIX Security 2023 paper *Your Optical Communication Information Is
 Stolen behind the Wall*.
 
-This release focuses on two reproducible ideas:
+This release focuses on two ideas:
 
 1. **Reflection insight:** a sinusoidal incident carrier multiplied by a
    switching reflection coefficient produces translated spectral components
@@ -103,27 +103,12 @@ ASCII text
   -> recovered text
 ```
 
-The passband simulation uses a downscaled carrier frequency to keep computation
-manageable. The harmonic translation and complex-envelope decoding behavior are
-the properties under study; the simulated carrier frequency is not intended to
-reproduce a particular RF front end.
-
 ### Relation to SDR deployment
 
 The MATLAB code is modular: waveform generation, channel input, synchronization,
 and decoding are separate stages. Readers may use the synchronization and
 decoder modules as references when integrating their own SDR acquisition
 pipeline.
-
-### Reproducibility notes
-
-- MATLAB tests cover coding round trips, exhaustive single-bit Hamming
-  correction, complex-baseband recovery, and harmonic-extracted passband
-  recovery.
-- Generated figures are included for convenience and can be regenerated.
-- No experimental dataset is required to run this release.
-- The simulations were added after the original 2023
-  artifact and should not be described as original over-the-air decoding data.
 
 ### License and commercial use
 
@@ -158,17 +143,12 @@ If this code supports an academic publication, please cite:
 }
 ```
 
-### Disclaimer
-
-This repository is a research artifact. It is provided without warranty and is
-not intended as a production communication or security system.
-
 ## 中文
 
 **LightThief** 的 MATLAB 端到端仿真代码，对应 USENIX Security 2023 论文
 *Your Optical Communication Information Is Stolen behind the Wall*。
 
-本仓库主要复现两个内容：
+本仓库主要展示两个内容：
 
 1. **反射机理验证：** 入射正弦载波与开关式反射系数相乘后，会产生频移后的频谱分量和奇次谐波边带。
 2. **端到端通信：** 文本被编码成 Manchester-OOK 光信号；带数据的光控制 tag 的反射状态；反射 RF 在方波谐波上携带数据；接收端选择一个谐波，同步并解码出字节。
@@ -257,20 +237,10 @@ ASCII 文本
   -> 恢复文本
 ```
 
-通带仿真使用了缩小后的载波频率，以控制计算量。这里关注的是谐波频移和复包络解码行为；
-仿真载波频率并不用于复现某个具体 RF 前端。
-
 ### 与 SDR 部署的关系
 
 MATLAB 代码是模块化的：波形生成、信道输入、同步和解码分别实现。读者可以在集成自己的
 SDR 采集流程时参考其中的同步和解码模块。
-
-### 可复现性说明
-
-- MATLAB 测试覆盖编码往返、Hamming 单比特纠错、复基带恢复，以及谐波提取后的通带恢复。
-- 仓库中包含生成好的图，方便查看，也可以重新生成。
-- 运行本仓库不需要实验数据集。
-- 这些仿真是在原始 2023 artifact 之后补充的，不应描述为原始 over-the-air 解码数据。
 
 ### 许可证与商业使用
 
@@ -299,7 +269,3 @@ SDR 采集流程时参考其中的同步和解码模块。
 	month = aug
 }
 ```
-
-### 免责声明
-
-本仓库是研究 artifact，不提供任何担保，也不作为生产级通信或安全系统使用。
