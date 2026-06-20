@@ -8,7 +8,7 @@ function out = matched_filter(sig, Nb)
 %   harmonics, which sit at integer multiples of the bit rate and are therefore
 %   orthogonal over the symbol (this is what isolates the data sideband).
 
-if nargin < 2, Nb = 20; end
+if nargin < 2, Nb = 12; end
 h = ones(1, Nb) / Nb;                 % unit-area boxcar = integrate & dump
 out = conv(sig, h, 'same');
 end

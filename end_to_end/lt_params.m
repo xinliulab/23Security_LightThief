@@ -12,19 +12,21 @@ function p = lt_params()
 %       square wave itself, and f_o is the optical clock rate (= bit rate),
 %       not a free parameter.
 %
-%   The RF carrier is set to 2 MHz so the passband simulation remains compact.
+%   The RF carrier uses the paper's FM-band experiment frequency (108 MHz).
+%   The reflected signal is sampled as SDR-style IQ around that RF center, so
+%   fs_rf is an IQ bandwidth / sample rate, not a direct 108 MHz ADC rate.
 
-p.Rb        = 100e3;                 % bit rate = optical clock rate f_o (Hz)
+p.Rb        = 100e3;                 % paper COTS OWC data-rate setting: 100 kbps
 p.fo        = p.Rb;                  % optical clock rate / square-wave freq
-p.chip_rate = 2 * p.Rb;             % Manchester chip rate (2 chips per bit)
+p.chip_rate = 2 * p.Rb;             % Manchester chip rate: 200 kchips/s
 
-p.fc        = 2e6;                   % RF carrier used by the simulation
-p.fc_real   = 108e6;                 % true FM-band carrier used for the physical link budget
-p.osr       = 200;                   % passband samples per bit -> fs_rf = osr*Rb
-p.fs_rf     = p.osr * p.Rb;         % passband sample rate (20 MHz)
+p.fc        = 108e6;                 % FM-band RF carrier used in the paper experiments
+p.fc_real   = p.fc;                  % physical link-budget carrier
+p.osr       = 24;                    % IQ samples per bit around the RF center
+p.fs_rf     = p.osr * p.Rb;         % SDR/IQ sample rate (2.4 MHz)
 
-p.Nb        = 20;                    % baseband samples per bit (after down-conversion)
-p.fs_bb     = p.Nb * p.Rb;          % baseband sample rate (2 MHz)
+p.Nb        = 12;                    % baseband samples per bit after harmonic selection
+p.fs_bb     = p.Nb * p.Rb;          % baseband sample rate (1.2 MHz)
 
 p.harmonic  = 1;                     % which reflected harmonic the RX selects (m=1: f_c+f_o)
 

@@ -11,18 +11,23 @@ function [r, t, light, chips] = backscatter_reflect(bits, p)
 %               whose 0.5 DC term is the un-shifted carrier leakage)
 %       r(t)  = b(t) .* S_cw                            (reflected RF, Eq. 8)
 %
+%   The {0,1} gate is important: its 0.5 DC term leaves carrier leakage at fc,
+%   while each odd harmonic carries an equivalent +/-1 BPSK phase term.  After
+%   the receiver selects fc+fo, the recovered data is therefore sliced as BPSK.
+%
 %   Because b(t) is a square wave at the optical clock rate f_o, its odd Fourier
 %   harmonics place copies of the data at  fc +/- m*f_o  (m = 1,3,5,...) with the
 %   bit embedded in the harmonic phase theta_n.  The harmonics are intrinsic to
 %   the optical square wave -- there is NO separate sub-carrier.
 %
-%   Returns the passband reflection r, its time base t, the light intensity
-%   waveform, and the Manchester chips.
+%   Returns the reflected RF complex envelope centered at fc, its time base t,
+%   the light intensity waveform, and the Manchester chips.  This mirrors the
+%   SDR/USRP view: fc is the RF tuning center, and this MATLAB waveform contains
+%   the offsets 0, +/-fo, +/-3fo, ... around that center.
 
 samples_per_chip = round(p.fs_rf / p.chip_rate);     % RF samples per Manchester chip
 [chips, light] = optical_waveform(bits, samples_per_chip);
 
 t = (0:numel(light) - 1) / p.fs_rf;
-cw = sin(2 * pi * p.fc * t);                          % ambient continuous wave
-r = light .* cw;                                      % reflected RF (Eq. 8)
+r = complex(light);                                   % RF envelope after tuning to fc
 end

@@ -251,7 +251,7 @@
         <div class="stage-body">
           <div class="stage-text">
             <div class="row"><span class="k">What the paper says</span><p>The tag reflects the ambient continuous wave only while the light is on, so the reflected RF is the CW multiplied by the optical square wave: S<sub>r</sub> = S<sub>cw</sub> × S<sub>sqw</sub> (Eq. 8).</p></div>
-            <div class="row"><span class="k">Signal &amp; variables</span><p class="vars"><code>r = light .* sin(2*pi*p.fc*t)</code> — the carrier is gated by b(t). <code>p.fc</code>, <code>p.fs_rf</code>.</p></div>
+            <div class="row"><span class="k">Signal &amp; variables</span><p class="vars"><code>r = complex(light)</code> — the SDR/IQ envelope of the carrier gated by b(t). <code>p.fc</code> is the RF center.</p></div>
             <div class="row files"><span class="k">MATLAB files</span><p><code>backscatter_reflect.m</code></p></div>
           </div>
           <figure class="stage-fig"><img src="figures/05_reflected_waveform.png" alt="reflected RF waveform">
@@ -356,15 +356,17 @@
     <!-- ===================== OUTPUT ===================== -->
     <section class="wrap">
       <h2>What a run prints</h2>
-      <p class="section-intro">Success means the decoded bytes equal the input message — not merely that a spectrum looks plausible.</p>
-      <div class="terminal"><span class="dim">Optical clock fo=100 kHz, RF carrier fc=2.00 MHz, fs_rf=20.0 MHz
-Reflected harmonics at fc +/- m*fo (m=1: 1.90/2.10 MHz, m=3: 1.70/2.30 MHz)
+      <p class="section-intro">Success means the decoded bytes equal the transmitted ID packets — not merely that a spectrum looks plausible.</p>
+      <div class="terminal"><span class="dim">Optical clock fo=100 kHz, RF carrier fc=108.00 MHz, SDR/IQ fs=2.4 MHz
+Reflected harmonics at fc +/- m*fo (m=1: 107.90/108.10 MHz, m=3: 107.70/108.30 MHz)
 Link budget: d_ph=0.3m d_t=1.0m d_r=10.0m -> RSS -33.2 dBm, SNR 56.8 dB</span>
 
-Transmitted : LightThief
-Decoded     : <span class="good">LightThief</span>
+Recovered independent ID packets:
+  01 TX: LT-ROOM-041   RX: <span class="good">LT-ROOM-041</span>
+  02 TX: LT-ROOM-042   RX: <span class="good">LT-ROOM-042</span>
+  03 TX: LT-ROOM-043   RX: <span class="good">LT-ROOM-043</span>
 BER         : <span class="good">0.0000</span>
-Hamming corrections: 0, parity OK: 10/10, stream inverted: 1</div>
+Hamming corrections: 0, parity OK: 33/33, stream inverted: 1</div>
     </section>
 
     <!-- ===================== RUN ===================== -->
@@ -374,7 +376,7 @@ Hamming corrections: 0, parity OK: 10/10, stream inverted: 1</div>
         <div class="start-card">
           <h3>One complete run</h3>
           <p>Open MATLAB in <code>end_to_end/</code> and run:</p>
-          <div class="command">run_demo('LightThief')</div>
+          <div class="command">run_demo('LT-ROOM-042')</div>
           <p>Keep <code>run_demo.m</code> and <code>lt_params.m</code> open and follow the numbered stages above.</p>
         </div>
         <div class="start-card">

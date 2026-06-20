@@ -66,12 +66,13 @@ Expected result:
 ```text
 [PASS] coding round-trip (no DSP) recovers text
 [PASS] coding round-trip BER == 0
+[PASS] packet stream round-trip recovers independent IDs
 [PASS] Hamming corrects every single-bit error in all 256 bytes
-[PASS] baseband-equivalent chain @10 dB decodes 'LightThief'
+[PASS] baseband-equivalent chain @10 dB decodes independent IDs
 [PASS] baseband-equivalent chain BER == 0
-[PASS] physical passband (harmonic-extracted) chain @15 dB decodes text
-[PASS] comb has carrier at fc
-[PASS] comb has first harmonic at fc+fo
+[PASS] physical passband (harmonic-extracted) chain @15 dB decodes IDs
+[PASS] comb has carrier leakage at fc offset
+[PASS] comb has first harmonic at fc+fo offset
 
 All tests passed.
 ```
@@ -80,7 +81,7 @@ All tests passed.
 
 ```matlab
 run_demo
-run_demo('Hello LightThief')
+run_demo('LT-ROOM-042')
 run_ber
 ```
 
@@ -91,9 +92,9 @@ AWGN.
 ### Signal chain
 
 ```text
-ASCII text
+ASCII ID packets
   -> Hamming(12,8) + overall parity
-  -> 10-bit preamble + Manchester-OOK optical waveform
+  -> independent packets with 10-bit preamble + Manchester-OOK optical waveform
   -> tag switching by that same data-coded light
   -> reflected RF = ambient carrier multiplied by the optical square wave
   -> harmonic comb at fc +/- m*fo, m = 1,3,5,...
@@ -202,12 +203,13 @@ test_sim
 ```text
 [PASS] coding round-trip (no DSP) recovers text
 [PASS] coding round-trip BER == 0
+[PASS] packet stream round-trip recovers independent IDs
 [PASS] Hamming corrects every single-bit error in all 256 bytes
-[PASS] baseband-equivalent chain @10 dB decodes 'LightThief'
+[PASS] baseband-equivalent chain @10 dB decodes independent IDs
 [PASS] baseband-equivalent chain BER == 0
-[PASS] physical passband (harmonic-extracted) chain @15 dB decodes text
-[PASS] comb has carrier at fc
-[PASS] comb has first harmonic at fc+fo
+[PASS] physical passband (harmonic-extracted) chain @15 dB decodes IDs
+[PASS] comb has carrier leakage at fc offset
+[PASS] comb has first harmonic at fc+fo offset
 
 All tests passed.
 ```
@@ -216,7 +218,7 @@ All tests passed.
 
 ```matlab
 run_demo
-run_demo('Hello LightThief')
+run_demo('LT-ROOM-042')
 run_ber
 ```
 
