@@ -3,7 +3,7 @@
 *.m~
 
 # Generated figures may be regenerated locally.
-matlab/insight_demo/figures/
+insight_demo/figures/
 
 # OS and editors
 .DS_Store

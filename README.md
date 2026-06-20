@@ -18,9 +18,8 @@ The release is MATLAB-only.
 ## What is included
 
 ```text
-matlab/
-  insight_demo/       Simplified sine-wave reflection and harmonic demo
-  end_to_end/         Complete encoder, channel, receiver, and decoder
+insight_demo/       Simplified sine-wave reflection and harmonic demo
+end_to_end/         Complete encoder, channel, receiver, and decoder
 ```
 
 This repository intentionally excludes historical hardware captures,
@@ -39,7 +38,7 @@ The MATLAB implementation is the recommended starting point.
 ### 1. Run the physical insight demo
 
 ```matlab
-cd matlab/insight_demo
+cd insight_demo
 run_sine_reflection_demo
 ```
 
@@ -53,7 +52,7 @@ This generates `figures/sine_reflection_spectrum.png` and shows:
 ### 2. Test the end-to-end implementation
 
 ```matlab
-cd matlab/end_to_end
+cd end_to_end
 test_sim
 ```
 
