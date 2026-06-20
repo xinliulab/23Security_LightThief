@@ -1,7 +1,7 @@
 function h = hamming_12_8(byte)
 %HAMMING_12_8  12-bit Hamming code for one byte (1-based positions).
 %   Data bits sit at positions [3 5 6 7 9 10 11 12] (MSB-first); parity bits at
-%   1,2,4,8 use the same coverage masks as the MATLAB artifact.  Mirrors
+%   1,2,4,8 use the same coverage masks as the MATLAB implementation.  Mirrors
 %   encoder.py / bpskPacketGenerator.m.
 
 bits = double(bitget(uint8(byte), 8:-1:1));   % MSB first: bits(1) = bit 8

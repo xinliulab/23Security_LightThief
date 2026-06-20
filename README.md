@@ -25,6 +25,7 @@ The release is MATLAB-only.
 ```text
 insight_demo/       Simplified sine-wave reflection and harmonic demo
 end_to_end/         Complete encoder, channel, receiver, and decoder
+hardware_reference/ Circuit photo and SDR/USRP reference flowgraphs
 ```
 
 For the easiest introduction to the signal-processing path, open
@@ -160,6 +161,7 @@ If this code supports an academic publication, please cite:
 ```text
 insight_demo/       简化的正弦反射与谐波演示
 end_to_end/         完整的编码器、信道、接收机和解码器
+hardware_reference/ 电路照片和 SDR/USRP 参考 flowgraph
 ```
 
 如果想最快理解信号处理流程，可以在浏览器中打开

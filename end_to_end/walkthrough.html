@@ -96,13 +96,13 @@
 </head>
 <body>
   <header class="wrap">
-    <div class="eyebrow">LightThief · USENIX Security 2023 · MATLAB artifact</div>
+    <div class="eyebrow">LightThief · USENIX Security 2023 · MATLAB simulation</div>
     <h1>Reading the code through the paper's signal model.</h1>
     <p class="lead">
       LightThief steals optical-wireless (OWC) data by letting the room's
       <em>data-coded light</em> switch a passive tag that backscatters an ambient
       RF carrier through the wall. This page is a reading map for the
-      <code>end_to_end</code> MATLAB artifact: it follows the exact signal chain
+      <code>end_to_end</code> MATLAB simulation: it follows the signal chain
       of the paper and, at every stage, names the file that implements it, the
       variables that carry the signal, and the figure that verifies it.
     </p>
@@ -356,8 +356,8 @@
     <!-- ===================== OUTPUT ===================== -->
     <section class="wrap">
       <h2>What a run prints</h2>
-      <p class="section-intro">Success means the decoded bytes equal the original message — not merely that a spectrum looks plausible.</p>
-      <div class="terminal"><span class="dim">Optical clock fo=100 kHz, RF carrier fc=2.00 MHz (downscaled), fs_rf=20.0 MHz
+      <p class="section-intro">Success means the decoded bytes equal the input message — not merely that a spectrum looks plausible.</p>
+      <div class="terminal"><span class="dim">Optical clock fo=100 kHz, RF carrier fc=2.00 MHz, fs_rf=20.0 MHz
 Reflected harmonics at fc +/- m*fo (m=1: 1.90/2.10 MHz, m=3: 1.70/2.30 MHz)
 Link budget: d_ph=0.3m d_t=1.0m d_r=10.0m -> RSS -33.2 dBm, SNR 56.8 dB</span>
 
@@ -388,7 +388,7 @@ Hamming corrections: 0, parity OK: 10/10, stream inverted: 1</div>
   </main>
 
   <footer class="wrap">
-    LightThief MATLAB research artifact · Paper-aligned walkthrough · Signal model
+    LightThief MATLAB simulation · Paper-aligned walkthrough · Signal model
     follows Liu et&nbsp;al., "LightThief: Your Optical Communication Information is
     Stolen behind the Wall," USENIX Security 2023 (Sec. 3–7, Eq. 1–8).
   </footer>
