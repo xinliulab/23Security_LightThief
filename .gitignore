@@ -1,0 +1,12 @@
+# MATLAB
+*.asv
+*.m~
+
+# Generated figures may be regenerated locally.
+matlab/insight_demo/figures/
+
+# OS and editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
