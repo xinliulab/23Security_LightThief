@@ -20,8 +20,8 @@ fig_dir = fullfile(fileparts(mfilename('fullpath')), 'figures');
 if ~exist(fig_dir, 'dir'), mkdir(fig_dir); end
 blue = [0.09 0.42 0.53]; orange = [0.84 0.42 0.18]; green = [0.17 0.48 0.33];
 
-% A short window of bits for readable waveform plots.
-demo_bits = build_frame('Hi', 1, p.preamble);      % 10 preamble + 2*13 = 36 bits
+% A short packet window for readable waveform plots.
+demo_bits = build_packet_stream('Hi', p.preamble); % 10 preamble + 2*13 = 36 bits
 nb_show = 24;                                       % bits to display in waveforms
 bshow = demo_bits(1:nb_show);
 
@@ -74,7 +74,11 @@ title('Stage 5 - Reflected RF: light gates the ambient carrier (paper Eq. 8)');
 xlabel('time (\mus)'); ylabel('amplitude'); savef(f, fig_dir, '05_reflected_waveform');
 
 %% 06 - reflected spectrum / harmonic comb ------------------------------------
-rs = backscatter_reflect(build_frame('LightThief', 8), p);
+packet_ids = {'LT-ROOM-041', 'LT-ROOM-042', 'LT-ROOM-043'};
+[frame_bits, truth_packets, packet_ids] = build_packet_stream(packet_ids, p.preamble);
+packet_lengths = cellfun(@numel, truth_packets);
+truth = [truth_packets{:}];
+rs = backscatter_reflect(frame_bits, p);
 n = numel(rs); spec = 20 * log10(abs(fft(rs .* hann(n).')) + 1e-9);
 spec = spec(1:floor(n / 2) + 1); fr = (0:floor(n / 2)) * (p.fs_rf / n) / 1e6;
 f = newfig(900, 500);
@@ -99,13 +103,12 @@ title('Zoom: the receiver down-converts the first upper harmonic f_c+f_o');
 xlabel('frequency (MHz)'); ylabel('magnitude (dB)'); savef(f, fig_dir, '06_spectrum');
 
 %% 07-09 - receive, synchronize, decode ---------------------------------------
-[frame_bits, truth] = build_frame('LightThief', 8);
 bb = band_select(rs, p, 1);
 cfg = lt_default_channel(p.fs_bb, 12, 7);
-cfg.freq_offset = 6e3; cfg.phase_offset_deg = 10; cfg.timing_ppm = 15;
+cfg.freq_offset = 6e3; cfg.phase_offset_deg = 10; cfg.timing_ppm = 15; cfg.dc_offset = 0.02;
 rx = channel_apply(bb, cfg);
 [rec_bits, synced] = recover(rx, p);
-res = decode_bits(rec_bits, p, numel(truth));
+res = decode_packet_stream(rec_bits, p, packet_lengths, numel(packet_ids));
 
 % 07 received noisy baseband (real part), a readable window
 seg = real(rx(1:min(40 * p.Nb, numel(rx))));
@@ -125,26 +128,34 @@ xlabel('In-phase'); ylabel('Quadrature'); savef(f, fig_dir, '08_sync_constellati
 
 % 09 decoded message panel
 f = newfig(900, 240); axis off;
-txt = sprintf(['Transmitted :  %s\nDecoded     :  %s\nBER         :  %.4f\n' ...
+txt = sprintf(['Packets     :  %s | %s | %s\nDecoded     :  %s | %s | %s\nBER         :  %.4f\n' ...
     'Hamming corrections: %d     parity OK: %d/%d     polarity inverted: %d'], ...
-    'LightThief', res.text, ber_calc(res.bytes, truth), res.corrections, ...
-    sum(res.parity_ok), numel(res.parity_ok), res.inverted);
+    packet_ids{1}, packet_ids{2}, packet_ids{3}, res.texts{1}, res.texts{2}, ...
+    res.texts{3}, ber_calc(res.bytes, truth), res.corrections, sum(res.parity_ok), ...
+    numel(res.parity_ok), res.inverted);
 text(0.02, 0.5, txt, 'FontName', 'Consolas', 'FontSize', 15, 'Color', green, 'VerticalAlignment', 'middle');
-title('Stage 9 - Frame sync + Hamming decode -> recovered message (Sec. 5.3, 6)');
+title('Stage 9 - Packet sync + Hamming decode -> recovered IDs (Sec. 5.3, 6)');
 savef(f, fig_dir, '09_decoded_message');
 
 %% 10 - BER curve (compact sweep) ---------------------------------------------
 eb_no = -2:2:18; snr_db = eb_no - 10 * log10(p.Nb);
-[fb, tr] = build_frame('LightThief', 40); nby = numel(tr) * 40;
+ber_ids = cell(1, 20);
+for k = 1:numel(ber_ids)
+    ber_ids{k} = sprintf('LT-%04d', k);
+end
+[fb, tr_packets] = build_packet_stream(ber_ids, p.preamble);
+tr = [tr_packets{:}];
+packet_lengths_ber = cellfun(@numel, tr_packets);
+nby = numel(tr);
 env = to_baseband_equiv(fb, p);
 bers = zeros(size(eb_no));
 for ii = 1:numel(eb_no)
     e = zeros(1, 4);
     for tnum = 1:4
         cfg = lt_default_channel(p.fs_bb, snr_db(ii), 200 + tnum);
-        cfg.freq_offset = 6e3; cfg.phase_offset_deg = 10; cfg.timing_ppm = 15;
+        cfg.freq_offset = 6e3; cfg.phase_offset_deg = 10; cfg.timing_ppm = 15; cfg.dc_offset = 0.02;
         rec = recover(channel_apply(env, cfg), p);
-        rr = decode_bits(rec, p, nby);
+        rr = decode_packet_stream(rec, p, packet_lengths_ber, numel(ber_ids));
         e(tnum) = ber_calc(rr.bytes, tr);
     end
     bers(ii) = mean(e);
@@ -155,7 +166,8 @@ semilogy(eb_no, max(bers, floor_ber), 'o-', 'LineWidth', 1.4, 'Color', blue); gr
 title('Stage 10 - End-to-end BER vs E_b/N_0 (Sec. 7.2)');
 xlabel('E_b/N_0 (dB)'); ylabel('bit error rate'); savef(f, fig_dir, '10_ber_curve');
 
-fprintf('Decoded "%s" (BER %.4f). Figures written to %s\n', res.text, ber_calc(res.bytes, truth), fig_dir);
+fprintf('Decoded %d ID packets (BER %.4f). Figures written to %s\n', ...
+    res.n_packets, ber_calc(res.bytes, truth), fig_dir);
 end
 
 

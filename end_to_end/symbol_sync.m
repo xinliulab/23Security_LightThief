@@ -3,6 +3,8 @@ function out = symbol_sync(x, sps)
 
 if nargin < 2, sps = 4; end
 ph = estimate_timing_phase(x, sps);
-base = 0:sps:(numel(x) - sps - 1);
-out = interp_samples(x, ph + base);
+base = 0:sps:(numel(x) - 1);
+pos = ph + base;
+pos = pos(pos <= numel(x) - 1);
+out = interp_samples(x, pos);
 end

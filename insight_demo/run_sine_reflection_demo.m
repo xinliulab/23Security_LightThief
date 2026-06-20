@@ -10,10 +10,10 @@ function run_sine_reflection_demo()
 % This is a simulation-only physical insight demo. It does not load measured
 % data or implement a hardware interface.
 
-fs = 20e6;
+fs = 240e6;
 duration = 2e-3;
-fc = 4e6;
-ftag = 250e3;
+fc = 108e6;
+ftag = 100e3;
 
 t = (0:round(duration * fs) - 1) / fs;
 incident = cos(2 * pi * fc * t);

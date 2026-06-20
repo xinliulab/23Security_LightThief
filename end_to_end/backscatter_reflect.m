@@ -11,6 +11,10 @@ function [r, t, light, chips] = backscatter_reflect(bits, p)
 %               whose 0.5 DC term is the un-shifted carrier leakage)
 %       r(t)  = b(t) .* S_cw                            (reflected RF, Eq. 8)
 %
+%   The {0,1} gate is important: its 0.5 DC term leaves carrier leakage at fc,
+%   while each odd harmonic carries an equivalent +/-1 BPSK phase term.  After
+%   the receiver selects fc+fo, the recovered data is therefore sliced as BPSK.
+%
 %   Because b(t) is a square wave at the optical clock rate f_o, its odd Fourier
 %   harmonics place copies of the data at  fc +/- m*f_o  (m = 1,3,5,...) with the
 %   bit embedded in the harmonic phase theta_n.  The harmonics are intrinsic to

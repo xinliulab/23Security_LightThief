@@ -1,10 +1,11 @@
 function bb = band_select(passband, p, harmonic)
 %BAND_SELECT  Quadrature down-conversion to a reflected harmonic (paper Sec. 5.3).
-%   Mixes the chosen reflected harmonic  fc + harmonic*fo  to baseband and
-%   decimates to the baseband rate fs_bb = Nb*Rb.  Default harmonic = 1 (the
-%   first harmonic fc+fo), exactly as the paper's demodulator.  The strong
-%   carrier leakage (at offset -fo after mixing) and the other harmonics are
-%   later nulled by the per-bit integrate-and-dump matched filter.
+%   Mixes the chosen reflected harmonic  fc + harmonic*fo  to baseband, applies
+%   the FIR anti-alias / low-pass filter in decimate(), and decimates to the
+%   baseband rate fs_bb = Nb*Rb.  Default harmonic = 1 (the first harmonic
+%   fc+fo), exactly as the paper's demodulator.  The strong carrier leakage (at
+%   offset -fo after mixing) and the other harmonics are later nulled by the
+%   per-bit integrate-and-dump matched filter.
 %   Requires Signal Processing Toolbox (decimate).
 
 if nargin < 3 || isempty(harmonic), harmonic = p.harmonic; end
@@ -18,4 +19,5 @@ q = round(p.fs_rf / p.fs_bb);
 % decimate() handles real signals only -> process I and Q separately.
 bb = decimate(real(mixed), q, 'fir') + 1j * decimate(imag(mixed), q, 'fir');
 bb = bb(:).';
+bb = bb - mean(bb);                  % explicit receiver DC-offset removal
 end

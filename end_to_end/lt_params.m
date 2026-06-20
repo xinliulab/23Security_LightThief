@@ -12,16 +12,16 @@ function p = lt_params()
 %       square wave itself, and f_o is the optical clock rate (= bit rate),
 %       not a free parameter.
 %
-%   The RF carrier is set to 2 MHz so the passband simulation remains compact.
+%   The RF carrier uses the paper's FM-band experiment frequency (108 MHz).
 
 p.Rb        = 100e3;                 % bit rate = optical clock rate f_o (Hz)
 p.fo        = p.Rb;                  % optical clock rate / square-wave freq
 p.chip_rate = 2 * p.Rb;             % Manchester chip rate (2 chips per bit)
 
-p.fc        = 2e6;                   % RF carrier used by the simulation
-p.fc_real   = 108e6;                 % true FM-band carrier used for the physical link budget
-p.osr       = 200;                   % passband samples per bit -> fs_rf = osr*Rb
-p.fs_rf     = p.osr * p.Rb;         % passband sample rate (20 MHz)
+p.fc        = 108e6;                 % FM-band RF carrier used in the paper experiments
+p.fc_real   = p.fc;                  % physical link-budget carrier
+p.osr       = 2400;                  % passband samples per bit -> fs_rf = 240 MHz
+p.fs_rf     = p.osr * p.Rb;         % passband sample rate; Nyquist covers fc+fo
 
 p.Nb        = 20;                    % baseband samples per bit (after down-conversion)
 p.fs_bb     = p.Nb * p.Rb;          % baseband sample rate (2 MHz)
