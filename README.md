@@ -141,9 +141,22 @@ maintainers and the relevant institutional technology-transfer office.
 
 ## Citation
 
-If this code supports an academic publication, please cite the USENIX Security
-2023 LightThief paper, *Your Optical Communication Information Is Stolen behind
-the Wall*. See [CITATION.md](CITATION.md).
+If this code supports an academic publication, please cite:
+
+```bibtex
+@inproceedings {lightthief,
+	author = {Xin Liu and Wei Wang and Guanqun Song and Ting Zhu},
+	title = {{LightThief}: Your Optical Communication Information is Stolen behind the Wall},
+	booktitle = {32nd USENIX Security Symposium (USENIX Security 23)},
+	year = {2023},
+	isbn = {978-1-939133-37-3},
+	address = {Anaheim, CA},
+	pages = {5325--5339},
+	url = {https://www.usenix.org/conference/usenixsecurity23/presentation/liu-xin},
+	publisher = {USENIX Association},
+	month = aug
+}
+```
 
 ## Disclaimer
 
