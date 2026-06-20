@@ -60,11 +60,11 @@ check('physical passband (harmonic-extracted) chain @15 dB decodes IDs', ...
 % --- harmonic comb appears at fc and fc +/- m*fo ----------------------------
 [comb_bits] = build_packet_stream({'A1', 'B2', 'C3', 'D4'}, p.preamble);
 r = backscatter_reflect(comb_bits, p);
-B = abs(fft(r .* hann(numel(r)).'));
-fr = (0:numel(r) - 1) * (p.fs_rf / numel(r));
+B = abs(fftshift(fft(r .* hann(numel(r)).')));
+fr = ((0:numel(r) - 1) - floor(numel(r) / 2)) * (p.fs_rf / numel(r));
 peak_near = @(f) any(abs(fr(B > 0.1 * max(B)) - f) < 0.15 * p.fo);
-check('comb has carrier at fc', peak_near(p.fc));
-check('comb has first harmonic at fc+fo', peak_near(p.fc + p.fo));
+check('comb has carrier leakage at fc offset', peak_near(0));
+check('comb has first harmonic at fc+fo offset', peak_near(p.fo));
 
 fprintf('\nAll tests passed.\n');
 end

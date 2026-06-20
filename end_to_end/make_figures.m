@@ -61,16 +61,16 @@ xlim([0 tt(end)]); yticks([0 1]); yticklabels({'match (no reflect)','short (refl
 title('Stage 4 - Tag switching: the light On/Off sets the PD impedance / reflection state (Fig. 5)');
 xlabel('time (\mus)'); ylabel('\Gamma state'); savef(f, fig_dir, '04_tag_switching');
 
-%% 05 - reflected RF waveform --------------------------------------------------
+%% 05 - reflected RF envelope --------------------------------------------------
 [r, trf, light_rf] = backscatter_reflect(bshow, p);
 nshow = round(6 * p.fs_rf / p.chip_rate);          % ~6 chips
 idx = 1:min(nshow, numel(r));
 f = newfig(900, 260);
-plot(trf(idx) * 1e6, r(idx), 'Color', blue, 'LineWidth', 0.7); hold on;
+plot(trf(idx) * 1e6, real(r(idx)), 'Color', blue, 'LineWidth', 0.9); hold on;
 plot(trf(idx) * 1e6, light_rf(idx), 'r--', 'LineWidth', 1.4);
 xlim([0 trf(idx(end)) * 1e6]); ylim([-1.2 1.2]); grid on;
-legend({'reflected RF  r(t)=b(t)\cdotsin(2\pi f_c t)', 'light gate b(t)'}, 'Location', 'southeast');
-title('Stage 5 - Reflected RF: light gates the ambient carrier (paper Eq. 8)');
+legend({'reflected RF envelope around f_c', 'light gate b(t)'}, 'Location', 'southeast');
+title('Stage 5 - Reflected RF envelope: light gates the 108 MHz ambient carrier (paper Eq. 8)');
 xlabel('time (\mus)'); ylabel('amplitude'); savef(f, fig_dir, '05_reflected_waveform');
 
 %% 06 - reflected spectrum / harmonic comb ------------------------------------
@@ -79,8 +79,7 @@ packet_ids = {'LT-ROOM-041', 'LT-ROOM-042', 'LT-ROOM-043'};
 packet_lengths = cellfun(@numel, truth_packets);
 truth = [truth_packets{:}];
 rs = backscatter_reflect(frame_bits, p);
-n = numel(rs); spec = 20 * log10(abs(fft(rs .* hann(n).')) + 1e-9);
-spec = spec(1:floor(n / 2) + 1); fr = (0:floor(n / 2)) * (p.fs_rf / n) / 1e6;
+[fr, spec] = absolute_spectrum(rs, p);
 f = newfig(900, 500);
 tiledlayout(2, 1, 'TileSpacing', 'compact');
 nexttile;
@@ -179,4 +178,11 @@ function savef(f, fig_dir, name)
 set(gca, 'FontSize', 10);
 saveas(f, fullfile(fig_dir, [name '.png']));
 close(f);
+end
+
+function [freqs_mhz, spec_db] = absolute_spectrum(sig, p)
+n = numel(sig);
+spec_db = 20 * log10(abs(fftshift(fft(sig .* hann(n).'))) + 1e-9);
+offset_hz = ((0:n - 1) - floor(n / 2)) * (p.fs_rf / n);
+freqs_mhz = (p.fc + offset_hz) / 1e6;
 end

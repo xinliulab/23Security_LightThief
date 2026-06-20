@@ -20,13 +20,14 @@ function [r, t, light, chips] = backscatter_reflect(bits, p)
 %   bit embedded in the harmonic phase theta_n.  The harmonics are intrinsic to
 %   the optical square wave -- there is NO separate sub-carrier.
 %
-%   Returns the passband reflection r, its time base t, the light intensity
-%   waveform, and the Manchester chips.
+%   Returns the reflected RF complex envelope centered at fc, its time base t,
+%   the light intensity waveform, and the Manchester chips.  This mirrors the
+%   SDR/USRP view: fc is the RF tuning center, and this MATLAB waveform contains
+%   the offsets 0, +/-fo, +/-3fo, ... around that center.
 
 samples_per_chip = round(p.fs_rf / p.chip_rate);     % RF samples per Manchester chip
 [chips, light] = optical_waveform(bits, samples_per_chip);
 
 t = (0:numel(light) - 1) / p.fs_rf;
-cw = sin(2 * pi * p.fc * t);                          % ambient continuous wave
-r = light .* cw;                                      % reflected RF (Eq. 8)
+r = complex(light);                                   % RF envelope after tuning to fc
 end

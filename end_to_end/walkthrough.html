@@ -251,7 +251,7 @@
         <div class="stage-body">
           <div class="stage-text">
             <div class="row"><span class="k">What the paper says</span><p>The tag reflects the ambient continuous wave only while the light is on, so the reflected RF is the CW multiplied by the optical square wave: S<sub>r</sub> = S<sub>cw</sub> × S<sub>sqw</sub> (Eq. 8).</p></div>
-            <div class="row"><span class="k">Signal &amp; variables</span><p class="vars"><code>r = light .* sin(2*pi*p.fc*t)</code> — the carrier is gated by b(t). <code>p.fc</code>, <code>p.fs_rf</code>.</p></div>
+            <div class="row"><span class="k">Signal &amp; variables</span><p class="vars"><code>r = complex(light)</code> — the SDR/IQ envelope of the carrier gated by b(t). <code>p.fc</code> is the RF center.</p></div>
             <div class="row files"><span class="k">MATLAB files</span><p><code>backscatter_reflect.m</code></p></div>
           </div>
           <figure class="stage-fig"><img src="figures/05_reflected_waveform.png" alt="reflected RF waveform">
@@ -357,7 +357,7 @@
     <section class="wrap">
       <h2>What a run prints</h2>
       <p class="section-intro">Success means the decoded bytes equal the transmitted ID packets — not merely that a spectrum looks plausible.</p>
-      <div class="terminal"><span class="dim">Optical clock fo=100 kHz, RF carrier fc=108.00 MHz, fs_rf=240.0 MHz
+      <div class="terminal"><span class="dim">Optical clock fo=100 kHz, RF carrier fc=108.00 MHz, SDR/IQ fs=2.4 MHz
 Reflected harmonics at fc +/- m*fo (m=1: 107.90/108.10 MHz, m=3: 107.70/108.30 MHz)
 Link budget: d_ph=0.3m d_t=1.0m d_r=10.0m -> RSS -33.2 dBm, SNR 56.8 dB</span>
 

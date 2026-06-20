@@ -19,7 +19,7 @@ if ~exist(fig_dir, 'dir'), mkdir(fig_dir); end
 packet_lengths = cellfun(@numel, truth_packets);
 truth = [truth_packets{:}];
 r = backscatter_reflect(frame_bits, p);
-fprintf('Optical clock fo=%.0f kHz, RF carrier fc=%.2f MHz, fs_rf=%.1f MHz\n', ...
+fprintf('Optical clock fo=%.0f kHz, RF carrier fc=%.2f MHz, SDR/IQ fs=%.1f MHz\n', ...
     p.fo / 1e3, p.fc / 1e6, p.fs_rf / 1e6);
 fprintf('Reflected harmonics at fc +/- m*fo (m=1: %.2f/%.2f MHz, m=3: %.2f/%.2f MHz)\n', ...
     (p.fc - p.fo) / 1e6, (p.fc + p.fo) / 1e6, ...
@@ -56,10 +56,7 @@ end
 
 
 function plot_comb(r, p, fig_dir)
-n = numel(r);
-spec = 20 * log10(abs(fft(r .* hann(n).')) + 1e-9);
-spec = spec(1:floor(n / 2) + 1);
-freqs = (0:floor(n / 2)) * (p.fs_rf / n) / 1e6;
+[freqs, spec] = absolute_spectrum(r, p);
 f = figure('Visible', 'off', 'Position', [100 100 860 560]);
 tiledlayout(2, 1, 'TileSpacing', 'compact');
 nexttile;
@@ -67,9 +64,7 @@ plot(freqs, spec, 'LineWidth', 0.8); hold on;
 for m = [1 3 5]
     for s = [-1 1]
         fk = (p.fc + s * m * p.fo) / 1e6;
-        if fk > 0 && fk < p.fs_rf / 2e6
-            xline(fk, 'r--', 'LineWidth', 0.6);
-        end
+        xline(fk, 'r--', 'LineWidth', 0.6);
     end
 end
 xline(p.fc / 1e6, 'k-', 'LineWidth', 1.0);
@@ -88,6 +83,14 @@ xlabel('Frequency (MHz)'); ylabel('Magnitude (dB)');
 xlim([(p.fc + p.fo - 1.8 * p.Rb) / 1e6, (p.fc + p.fo + 1.8 * p.Rb) / 1e6]);
 saveas(f, fullfile(fig_dir, 'harmonic_comb.png'));
 close(f);
+end
+
+
+function [freqs_mhz, spec_db] = absolute_spectrum(sig, p)
+n = numel(sig);
+spec_db = 20 * log10(abs(fftshift(fft(sig .* hann(n).'))) + 1e-9);
+offset_hz = ((0:n - 1) - floor(n / 2)) * (p.fs_rf / n);
+freqs_mhz = (p.fc + offset_hz) / 1e6;
 end
 
 

@@ -10,10 +10,10 @@ function run_sine_reflection_demo()
 % This is a simulation-only physical insight demo. It does not load measured
 % data or implement a hardware interface.
 
-fs = 240e6;
-duration = 2e-3;
 fc = 108e6;
 ftag = 100e3;
+fs = 8 * fc;                % plotting sample rate for the 108 MHz sine
+duration = 40 / ftag;       % enough tag periods for sideband resolution
 
 t = (0:round(duration * fs) - 1) / fs;
 incident = cos(2 * pi * fc * t);

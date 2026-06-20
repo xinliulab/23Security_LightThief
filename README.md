@@ -71,8 +71,8 @@ Expected result:
 [PASS] baseband-equivalent chain @10 dB decodes independent IDs
 [PASS] baseband-equivalent chain BER == 0
 [PASS] physical passband (harmonic-extracted) chain @15 dB decodes IDs
-[PASS] comb has carrier at fc
-[PASS] comb has first harmonic at fc+fo
+[PASS] comb has carrier leakage at fc offset
+[PASS] comb has first harmonic at fc+fo offset
 
 All tests passed.
 ```
@@ -208,8 +208,8 @@ test_sim
 [PASS] baseband-equivalent chain @10 dB decodes independent IDs
 [PASS] baseband-equivalent chain BER == 0
 [PASS] physical passband (harmonic-extracted) chain @15 dB decodes IDs
-[PASS] comb has carrier at fc
-[PASS] comb has first harmonic at fc+fo
+[PASS] comb has carrier leakage at fc offset
+[PASS] comb has first harmonic at fc+fo offset
 
 All tests passed.
 ```

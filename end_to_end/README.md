@@ -26,7 +26,7 @@ Requires the Signal Processing Toolbox (`resample`, `decimate`, `hann`).
 | Coding | ASCII IDs -> independent packets with Hamming(12,8)+parity and 10-bit preamble | `encode_byte.m`, `build_frame.m`, `build_packet_stream.m`, `hamming_12_8.m` |
 | Optical signal | Manchester-OOK light = square wave at `fo` | `manchester_enc.m`, `optical_waveform.m` |
 | Tag switching | light On/Off sets the reflection state | `backscatter_reflect.m` |
-| Reflection | `r(t) = b(t)*sin(2*pi*fc*t)` -> harmonics `fc +/- m*fo` | `backscatter_reflect.m` |
+| Reflection | SDR/IQ envelope of `b(t)*sin(2*pi*fc*t)` -> harmonics `fc +/- m*fo` | `backscatter_reflect.m` |
 | Reception | down-convert `fc+fo`, DC/LPF + impairments | `band_select.m`, `channel_apply.m` |
 | Sync | matched filter, CFO, timing, Costas | `recover.m`, `matched_filter.m`, `coarse_cfo.m`, `symbol_sync.m`, `costas_bpsk.m` |
 | Decode | preamble sync, independent packet parsing, Hamming + parity | `decode_bits.m`, `decode_packet_stream.m`, `find_frame_start.m`, `hamming_decode.m` |
@@ -34,7 +34,7 @@ Requires the Signal Processing Toolbox (`resample`, `decimate`, `hann`).
 ## Key parameters (`lt_params.m`)
 
 `Rb = fo = 100 kHz`, Manchester chip rate `2*Rb`, RF carrier `fc = 108 MHz`,
-passband `fs_rf = 240 MHz`, baseband `Nb = 20` samples/bit.
+SDR/IQ sample rate `fs_rf = 2.4 MHz`, baseband `Nb = 12` samples/bit.
 
 ## Modeling note
 
