@@ -9,9 +9,10 @@ This release focuses on two reproducible ideas:
 1. **Reflection insight:** a sinusoidal incident carrier multiplied by a
    switching reflection coefficient produces translated spectral components
    and odd-harmonic sidebands.
-2. **End-to-end communication:** text is encoded, pulse-shaped, translated onto
-   a backscatter harmonic, passed through an impaired channel, synchronized,
-   and decoded back into bytes.
+2. **End-to-end communication:** text is encoded into Manchester-OOK light; the
+   data-coded light switches the tag reflection; the reflected RF carries the
+   data on square-wave harmonics, then the receiver selects a harmonic,
+   synchronizes, and decodes the bytes.
 
 The release is MATLAB-only.
 
@@ -21,6 +22,9 @@ The release is MATLAB-only.
 insight_demo/       Simplified sine-wave reflection and harmonic demo
 end_to_end/         Complete encoder, channel, receiver, and decoder
 ```
+
+For the easiest introduction to the signal-processing path, open
+[`end_to_end/walkthrough.html`](end_to_end/walkthrough.html) in a web browser.
 
 This repository intentionally excludes historical hardware captures,
 decoder-conditioned datasets, legacy decoder experiments, and instrument
@@ -62,9 +66,11 @@ Expected result:
 [PASS] coding round-trip (no DSP) recovers text
 [PASS] coding round-trip BER == 0
 [PASS] Hamming corrects every single-bit error in all 256 bytes
-[PASS] baseband chain @12 dB decodes 'LightThief'
-[PASS] baseband chain BER == 0
-[PASS] passband (harmonic-extracted) chain @15 dB decodes text
+[PASS] baseband-equivalent chain @10 dB decodes 'LightThief'
+[PASS] baseband-equivalent chain BER == 0
+[PASS] physical passband (harmonic-extracted) chain @15 dB decodes text
+[PASS] comb has carrier at fc
+[PASS] comb has first harmonic at fc+fo
 
 All tests passed.
 ```
@@ -86,14 +92,14 @@ AWGN.
 ```text
 ASCII text
   -> Hamming(12,8) + overall parity
-  -> start bit + Manchester coding
-  -> BPSK with half-sine pulse shaping
-  -> switching reflection / backscatter harmonic
+  -> 10-bit preamble + Manchester-OOK optical waveform
+  -> tag switching by that same data-coded light
+  -> reflected RF = ambient carrier multiplied by the optical square wave
+  -> harmonic comb at fc +/- m*fo, m = 1,3,5,...
   -> CFO + phase offset + timing drift + AWGN
-  -> harmonic selection and downconversion
+  -> select and downconvert the first reflected harmonic
   -> matched filter and carrier/timing synchronization
-  -> BPSK slicing and preamble alignment
-  -> Manchester and Hamming decoding
+  -> BPSK slicing, preamble alignment, Hamming decoding
   -> recovered text
 ```
 

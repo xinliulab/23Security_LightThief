@@ -1,8 +1,9 @@
 function best_phase = estimate_timing_phase(x, sps, step)
 %ESTIMATE_TIMING_PHASE  Fractional symbol-timing phase maximizing mean |sample|.
-%   At the correct phase the symbol-spaced samples sit on the half-sine pulse
-%   peaks; off-phase they fall on inter-symbol transitions.  Robust for this
-%   NRZ-style signal and absorbs the matched-filter delay and static timing offset.
+%   At the correct phase the symbol-spaced samples sit near the centers of the
+%   matched-filtered bit intervals; off-phase they fall on transitions.  Robust
+%   for this NRZ-style harmonic envelope and absorbs the matched-filter delay
+%   and static timing offset.
 
 if nargin < 2, sps = 4; end
 if nargin < 3, step = 0.05; end
