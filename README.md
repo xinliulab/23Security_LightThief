@@ -112,8 +112,6 @@ and decoding are separate stages. Readers may use the synchronization and
 decoder modules as references when integrating their own SDR acquisition
 pipeline.
 
-**This repository contains no USRP implementation and makes no claim of USRP or
-hardware validation.** The released test results validate the simulation chain.
 
 ## Reproducibility notes
 
